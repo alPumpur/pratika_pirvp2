@@ -12,23 +12,38 @@
 <div id="app">
     <div class="column">
         <h2>Карточка 1</h2>
-        <div class="card" v-for="(card) in column1" >
+        <div class="card" v-for="(card, index) in column1" :key="index">
             <h3>{{ card.title }}</h3>
-
+            <ul>
+                <li v-for="(item, i) in card.items" :key="i" :class="{ 'completed': item.completed }">
+                    <input type="checkbox" v-model="item.completed" @change="checkCompletion(card)">
+                    <label>{{ item.text }}</label>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="column">
         <h2>Карточка 2</h2>
-        <div class="card" v-for="(card) in column2" >
+        <div class="card" v-for="(card, index) in column2" :key="index">
             <h3>{{ card.title }}</h3>
-
+            <ul>
+                <li v-for="(item, i) in card.items" :key="i" :class="{ 'completed': item.completed }">
+                    <input type="checkbox" v-model="item.completed" @change="checkCompletion(card)">
+                    <label>{{ item.text }}</label>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="column">
         <h2>Карточка 3</h2>
-        <div class="card" v-for="(card) in column3" >
+        <div class="card" v-for="(card, index) in column3" :key="index">
             <h3>{{ card.title }}</h3>
-
+            <ul>
+                <li v-for="(item, i) in card.items" :key="i" :class="{ 'completed': item.completed }">
+                    <input type="checkbox" v-model="item.completed" @change="checkCompletion(card)">
+                    <label>{{ item.text }}</label>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

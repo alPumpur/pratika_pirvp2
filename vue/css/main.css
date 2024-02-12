@@ -12,3 +12,6 @@
     border: 1px solid #ccc;
 }
 
+.completed {
+    text-decoration: line-through;
+}
