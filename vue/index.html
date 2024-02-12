@@ -44,6 +44,7 @@
                     <label>{{ item.text }}</label>
                 </li>
             </ul>
+            <p v-if="card.completed">Выполнено: {{ card.completedDate }}</p>
         </div>
     </div>
 </div>

@@ -46,6 +46,7 @@ const app = new Vue({
                     title: card.title,
                     items: card.items,
                     completed: true,
+                    completedDate: new Date().toLocaleString()
                 });
             }
         }
