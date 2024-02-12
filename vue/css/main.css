@@ -1,0 +1,17 @@
+.column {
+    display: inline-block;
+    vertical-align: top;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.card {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.completed {
+    text-decoration: line-through;
+}
