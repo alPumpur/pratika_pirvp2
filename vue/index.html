@@ -12,13 +12,24 @@
 <div id="app">
     <div class="column">
         <h2>Карточка 1</h2>
+        <div class="card" v-for="(card) in column1" >
+            <h3>{{ card.title }}</h3>
 
+        </div>
     </div>
     <div class="column">
         <h2>Карточка 2</h2>
+        <div class="card" v-for="(card) in column2" >
+            <h3>{{ card.title }}</h3>
+
+        </div>
     </div>
     <div class="column">
         <h2>Карточка 3</h2>
+        <div class="card" v-for="(card) in column3" >
+            <h3>{{ card.title }}</h3>
+
+        </div>
     </div>
 </div>
 
