@@ -8,46 +8,74 @@
     <script defer src="./src/vue.js"></script>
     <script defer src="./src/main.js"></script>
 </head>
+
 <body>
-<div id="app">
-    <div class="column">
-        <h2>Карточка 1</h2>
-        <div class="card" v-for="(card, index) in column1" :key="index">
-            <h3>{{ card.title }}</h3>
-            <ul>
-                <li v-for="(item, i) in card.items" :key="i" :class="{ 'completed': item.completed }">
-                    <input type="checkbox" v-model="item.completed" @change="checkCompletion(card)">
-                    <label>{{ item.text }}</label>
-                </li>
-            </ul>
+        <div class="column" id="column1">
+            <h2>Column 1</h2>
+            <div class="card" id="card1">
+                <h3>Card 1.1</h3>
+                <ul>
+                    <li><input type="checkbox"> Task 1</li>
+                    <li><input type="checkbox"> Task 2</li>
+                    <li><input type="checkbox"> Task 3</li>
+                </ul>
+            </div>
+            <div class="card" id="card2">
+                <h3>Card 1.2</h3>
+                <ul>
+                    <li><input type="checkbox">Task 1</li>
+                    <li><input type="checkbox">Task 2</li>
+                    <li><input type="checkbox">Task 3</li>
+                </ul>
+            </div>
         </div>
-    </div>
-    <div class="column">
-        <h2>Карточка 2</h2>
-        <div class="card" v-for="(card, index) in column2" :key="index">
-            <h3>{{ card.title }}</h3>
-            <ul>
-                <li v-for="(item, i) in card.items" :key="i" :class="{ 'completed': item.completed }">
-                    <input type="checkbox" v-model="item.completed" @change="checkCompletion(card)">
-                    <label>{{ item.text }}</label>
-                </li>
-            </ul>
+        <div class="column" id="column2">
+            <h2>Column 2</h2>
+            <div class="card" id="card3">
+                <h3>Card 2.1</h3>
+                <ul>
+                    <li><input type="checkbox">Task 1</li>
+                    <li><input type="checkbox">Task 2</li>
+                    <li><input type="checkbox">Task 3</li>
+                </ul>
+            </div>
+            <div class="card" id="card4">
+                <h3>Card 2.2</h3>
+                <ul>
+                    <li><input type="checkbox">Task 1</li>
+                    <li><input type="checkbox">Task 2</li>
+                    <li><input type="checkbox">Task 3</li>
+                </ul>
+            </div>
+            <div class="card" id="card5">
+                <h3>Card 2.3</h3>
+                <ul>
+                    <li><input type="checkbox">Task 1</li>
+                    <li><input type="checkbox">Task 2</li>
+                    <li><input type="checkbox">Task 3</li>
+                </ul>
+            </div>
+            <div class="card" id="card7">
+                <h3>Card 2.4</h3>
+                <ul>
+                    <li><input type="checkbox">Task 1</li>
+                    <li><input type="checkbox">Task 2</li>
+                    <li><input type="checkbox">Task 3</li>
+                </ul>
+            </div>
         </div>
-    </div>
-    <div class="column">
-        <h2>Карточка 3</h2>
-        <div class="card" v-for="(card, index) in column3" :key="index">
-            <h3>{{ card.title }}</h3>
-            <ul>
-                <li v-for="(item, i) in card.items" :key="i" :class="{ 'completed': item.completed }">
-                    <input type="checkbox" v-model="item.completed" @change="checkCompletion(card)">
-                    <label>{{ item.text }}</label>
-                </li>
-            </ul>
-            <p v-if="card.completed">Выполнено: {{ card.completedDate }}</p>
+        <div class="column" id="column3">
+            <h2>Column 3</h2>
+            <div class="card" id="card6">
+                <h3>Card 3.1</h3>
+                <ul>
+                    <li><input type="checkbox">Task 1</li>
+                    <li><input type="checkbox">Task 2</li>
+                    <li><input type="checkbox">Task 3</li>
+                </ul>
+            </div>
         </div>
-    </div>
-</div>
 
 </body>
+
 </html>
