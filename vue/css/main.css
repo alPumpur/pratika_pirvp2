@@ -26,3 +26,8 @@ ul {
 li {
     list-style-type: none;
 }
+
+.button{
+    width: 150px;
+    height: 80px;
+}

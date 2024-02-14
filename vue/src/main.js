@@ -36,48 +36,62 @@ function checkAllTasksCompleted(card) {
     return [...cardTasks].every(task => task.checked);
 }
 
-// Example: Move card from column 1 to column 2 when tasks are more than 50% completed
-const cardsColumn1 = document.querySelectorAll('#column1 .card');
-const cardsColumn2 = document.querySelectorAll('#column2 .card');
-
-cardsColumn1.forEach(card => {
+// Function to handle task completion and card movement
+function handleTaskCompletion(card) {
     const cardTasks = card.querySelectorAll('input[type="checkbox"]');
     const totalTasks = cardTasks.length;
 
-    cardTasks.forEach(task => {
-        task.addEventListener('change', () => {
-            const isChecked = task.checked;
-            const listItem = task.parentElement;
-            if (isChecked) {
-                listItem.classList.add('completed');
-            } else {
-                listItem.classList.remove('completed');
-            }
-            const completedTasks = card.querySelectorAll('input[type="checkbox"]:checked').length;
-            const completionPercentage = (completedTasks / totalTasks) * 100;
-            if (completionPercentage >= 50) {
-                toggleColumn1Disabled(true);
-            }
-            if (completionPercentage === 100) {
-                toggleColumn1Disabled(false);
+    const completedTasks = card.querySelectorAll('input[type="checkbox"]:checked').length;
+    const completionPercentage = (completedTasks / totalTasks) * 100;
 
+    if (completionPercentage >= 50 && completionPercentage < 100) {
+        moveToColumn2(card.id);
+    } else if (completionPercentage === 100) {
+        moveToColumn3(card.id);
+    }
+}
 
-                moveToColumn2(card.id);
-                moveToColumn3(card.id);
-            }
-        });
+// Generate unique ID for each card
+function uuid() {
+    return 'card-' + Math.random().toString(36).substr(2, 9);
+}
+
+// Function to add new card dynamically to a specified column
+function addNewCard(columnId) {
+    const column = document.getElementById(columnId);
+
+    // Check if maximum number of cards in the column is reached
+    const columnCardsCount = column.querySelectorAll('.card').length;
+    if (columnId === 'column1' && columnCardsCount >= 3) {
+        alert('Maximum cards reached in Column 1');
+        return;
+    }
+    if (columnId === 'column2' && columnCardsCount >= 5) {
+        alert('Maximum cards reached in Column 2');
+        return;
+    }
+
+    // Create new card element
+    const newCard = document.createElement('div');
+    const cardId = uuid(); // Generate unique ID for the card
+    newCard.id = cardId;
+    newCard.classList.add('card');
+    newCard.innerHTML =
+        `<h3>New Card</h3>
+    <ul>
+        <li><input type="checkbox"> Task 1</li>
+        <li><input type="checkbox"> Task 2</li>
+        <li><input type="checkbox"> Task 3</li>
+    </ul>`;
+
+// Add task completion event listener
+const cardTasks = newCard.querySelectorAll('input[type="checkbox"]');
+cardTasks.forEach(task => {
+    task.addEventListener('change', () => {
+        handleTaskCompletion(newCard);
     });
 });
 
-// Check column 2 completion when any task is checked
-cardsColumn2.forEach(card => {
-    const cardTasks = card.querySelectorAll('input[type="checkbox"]');
-    cardTasks.forEach(task => {
-        task.addEventListener('change', () => {
-            if (checkAllTasksCompleted(card)) {
-                toggleColumn1Disabled(false);
-                moveToColumn3(card.id); // Move to column 3 if all tasks completed
-            }
-        });
-    });
-});
+// Add new card to the specified column
+column.appendChild(newCard);
+}
