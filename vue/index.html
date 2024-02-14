@@ -9,18 +9,35 @@
 
 <body>
     <div class="column" id="column1">
-        <h2>Column 1</h2>
+        <h2>Столбец 1</h2>
     </div>
     <div class="column" id="column2">
-        <h2>Column 2</h2>
+        <h2>Столбец 2</h2>
     </div>
     <div class="column" id="column3">
-        <h2>Column 3</h2>
+        <h2>Столбец 3</h2>
     </div>
 
-    <button onclick="addNewCard('column1')" class="button">Добавить карточку в столбец 1</button>
-    <button onclick="addNewCard('column2')" class="button">Добавить карточку в столбец 2</button>
-    <button onclick="addNewCard('column3')" class="button">Добавить карточку в столбец 3</button>
+    <button onclick="showCardForm('column1')" class="button">Добавить карточку в столбец 1</button>
+    <button onclick="showCardForm('column2')" class="button">Добавить карточку в столбец 2</button>
+    <button onclick="showCardForm('column3')" class="button">Добавить карточку в столбец 3</button>
+
+    <div id="cardForm" style="display: none;">
+        <h3>Добавить карточку</h3>
+        <label for="cardTitle">Заголовок:</label>
+        <input type="text" id="cardTitle" name="cardTitle"><br><br>
+        <label for="task1">Пункт 1:</label>
+        <input type="text" id="task1" name="task1"><br><br>
+        <label for="task2">Пункт 2:</label>
+        <input type="text" id="task2" name="task2"><br><br>
+        <label for="task3">Пункт 3:</label>
+        <input type="text" id="task3" name="task3"><br><br>
+        <label for="task4">Пункт 4:</label>
+        <input type="text" id="task4" name="task4"><br><br>
+        <label for="task5">Пункт 5:</label>
+        <input type="text" id="task5" name="task5"><br><br>
+        <button onclick="addNewCard()" class="button">Создать карточку</button>
+    </div>
 
     <script defer src="./src/vue.js"></script>
     <script defer src="./src/main.js"></script>

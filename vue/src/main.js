@@ -62,20 +62,44 @@ function uuid() {
     return 'card-' + Math.random().toString(36).substr(2, 9);
 }
 
-// Function to add new card dynamically to a specified column
-function addNewCard(columnId) {
+    function showCardForm(columnId) {
+    const cardForm = document.getElementById('cardForm');
     const column = document.getElementById(columnId);
+    cardForm.style.display = 'block';
+    // Store column id in a hidden input field
+    const columnInput = document.createElement('input');
+    columnInput.type = 'hidden';
+    columnInput.name = 'columnId';
+    columnInput.value = columnId;
+    cardForm.appendChild(columnInput);
+}
 
-    // Check if maximum number of cards in the column is reached
-    const columnCardsCount = column.querySelectorAll('.card').length;
-    if (columnId === 'column1' && columnCardsCount >= 3) {
-        alert('Максимальное количество карточек: 3');
-        return;
-    }
-    if (columnId === 'column2' && columnCardsCount >= 5) {
-        alert('Максимальное количество карточек: 5');
-        return;
-    }
+    function hideCardForm() {
+    const cardForm = document.getElementById('cardForm');
+    cardForm.style.display = 'none';
+    // Clear form fields
+    document.getElementById('cardTitle').value = '';
+    for (let i = 1; i <= 5; i++) {
+    document.getElementById(`task${i}`).value = '';
+}
+}
+
+    function addNewCard() {
+    const cardTitle = document.getElementById('cardTitle').value;
+    const tasks = [];
+    for (let i = 1; i <= 5; i++) {
+    const taskInput = document.getElementById(`task${i}`).value;
+    if (taskInput.trim() !== '') {
+    tasks.push(taskInput);
+}
+}
+    if (tasks.length < 3) {
+    alert('Необходимо заполнить как минимум три пункта.');
+    return;
+}
+
+    const columnId = document.querySelector('#cardForm [name="columnId"]').value;
+    const column = document.getElementById(columnId);
 
     // Create new card element
     const newCard = document.createElement('div');
@@ -83,38 +107,31 @@ function addNewCard(columnId) {
     newCard.id = cardId;
     newCard.classList.add('card');
 
-    // Prompt user for card title
-    const cardTitle = prompt('Введите заголовок карточки:');
+    // Set card title
     const titleElement = document.createElement('h3');
     titleElement.textContent = cardTitle || 'New Card';
     newCard.appendChild(titleElement);
 
-    // Prompt user for tasks
-    const numTasks = prompt('Введите количество заданий (от 3 до 5):');
-    const numTasksInt = parseInt(numTasks);
-    const numTasksValid = Number.isInteger(numTasksInt) && numTasksInt >= 3 && numTasksInt <= 5;
+    // Create tasks list
+    const tasksList = document.createElement('ul');
+    tasks.forEach((taskText, index) => {
+    const taskElement = document.createElement('li');
+    taskElement.innerHTML = `<input type="checkbox"> ${taskText}`;
+    tasksList.appendChild(taskElement);
+    });
+    newCard.appendChild(tasksList);
 
-    if (!numTasksValid) {
-        alert('Количество заданий должно быть целым числом от 3 до 5.');
-        return;
+    // Add task completion event listener
+    const cardTasks = newCard.querySelectorAll('input[type="checkbox"]');
+    cardTasks.forEach(task => {
+    task.addEventListener('change', () => {
+        handleTaskCompletion(newCard);
+    });
+});
+
+    // Add new card to the specified column
+    column.appendChild(newCard);
+    hideCardForm();
     }
 
-    const tasksList = document.createElement('ul');
-    for (let i = 1; i <= numTasksInt; i++) {
-        const taskText = prompt(`Введите текст для задания ${i}:`);
-        const taskElement = document.createElement('li');
-        taskElement.innerHTML = `<input type="checkbox"> ${taskText || `Task ${i}`}`;
-            tasksList.appendChild(taskElement);
-            }
-            newCard.appendChild(tasksList);
-            // Add task completion event listener
-            const cardTasks = newCard.querySelectorAll('input[type="checkbox"]');
-            cardTasks.forEach(task => {
-                task.addEventListener('change', () => {
-                    handleTaskCompletion(newCard);
-                });
-            });
 
-            // Add new card to the specified column
-            column.appendChild(newCard);
-            }
