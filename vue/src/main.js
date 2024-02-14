@@ -69,11 +69,11 @@ function addNewCard(columnId) {
     // Check if maximum number of cards in the column is reached
     const columnCardsCount = column.querySelectorAll('.card').length;
     if (columnId === 'column1' && columnCardsCount >= 3) {
-        alert('Максимальное количество карточек:3');
+        alert('Максимальное количество карточек: 3');
         return;
     }
     if (columnId === 'column2' && columnCardsCount >= 5) {
-        alert('Максимальное количество карточек:5');
+        alert('Максимальное количество карточек: 5');
         return;
     }
 
@@ -82,22 +82,39 @@ function addNewCard(columnId) {
     const cardId = uuid(); // Generate unique ID for the card
     newCard.id = cardId;
     newCard.classList.add('card');
-    newCard.innerHTML =
-        `<h3>New Card</h3>
-    <ul>
-        <li><input type="checkbox"> Task 1</li>
-        <li><input type="checkbox"> Task 2</li>
-        <li><input type="checkbox"> Task 3</li>
-    </ul>`;
 
-// Add task completion event listener
-const cardTasks = newCard.querySelectorAll('input[type="checkbox"]');
-cardTasks.forEach(task => {
-    task.addEventListener('change', () => {
-        handleTaskCompletion(newCard);
-    });
-});
+    // Prompt user for card title
+    const cardTitle = prompt('Введите заголовок карточки:');
+    const titleElement = document.createElement('h3');
+    titleElement.textContent = cardTitle || 'New Card';
+    newCard.appendChild(titleElement);
 
-// Add new card to the specified column
-column.appendChild(newCard);
-}
+    // Prompt user for tasks
+    const numTasks = prompt('Введите количество заданий (от 3 до 5):');
+    const numTasksInt = parseInt(numTasks);
+    const numTasksValid = Number.isInteger(numTasksInt) && numTasksInt >= 3 && numTasksInt <= 5;
+
+    if (!numTasksValid) {
+        alert('Количество заданий должно быть целым числом от 3 до 5.');
+        return;
+    }
+
+    const tasksList = document.createElement('ul');
+    for (let i = 1; i <= numTasksInt; i++) {
+        const taskText = prompt(`Введите текст для задания ${i}:`);
+        const taskElement = document.createElement('li');
+        taskElement.innerHTML = `<input type="checkbox"> ${taskText || `Task ${i}`}`;
+            tasksList.appendChild(taskElement);
+            }
+            newCard.appendChild(tasksList);
+            // Add task completion event listener
+            const cardTasks = newCard.querySelectorAll('input[type="checkbox"]');
+            cardTasks.forEach(task => {
+                task.addEventListener('change', () => {
+                    handleTaskCompletion(newCard);
+                });
+            });
+
+            // Add new card to the specified column
+            column.appendChild(newCard);
+            }
