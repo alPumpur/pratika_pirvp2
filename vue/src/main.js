@@ -45,9 +45,15 @@ function handleTaskCompletion(card) {
     const completionPercentage = (completedTasks / totalTasks) * 100;
 
     if (completionPercentage >= 50 && completionPercentage < 100) {
-        moveToColumn2(card.id);
+        const column2CardsCount = document.querySelectorAll('#column2 .card').length;
+        if (column2CardsCount >= 5) {
+            toggleColumn1Disabled(true); // Замораживаем первый столбец
+        } else {
+            moveToColumn2(card.id);
+        }
     } else if (completionPercentage === 100) {
         moveToColumn3(card.id);
+        toggleColumn1Disabled(false); // Размораживаем первый столбец
     }
 }
 
@@ -63,11 +69,11 @@ function addNewCard(columnId) {
     // Check if maximum number of cards in the column is reached
     const columnCardsCount = column.querySelectorAll('.card').length;
     if (columnId === 'column1' && columnCardsCount >= 3) {
-        alert('Maximum cards reached in Column 1');
+        alert('Максимальное количество карточек:3');
         return;
     }
     if (columnId === 'column2' && columnCardsCount >= 5) {
-        alert('Maximum cards reached in Column 2');
+        alert('Максимальное количество карточек:5');
         return;
     }
 
