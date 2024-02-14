@@ -30,4 +30,10 @@ li {
 .button{
     width: 150px;
     height: 80px;
+    margin-right: 15px;
+}
+
+.form{
+    display: none;
+    border: 1px solid black;
 }
