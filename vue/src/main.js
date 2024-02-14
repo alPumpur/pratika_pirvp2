@@ -62,7 +62,7 @@ function uuid() {
     return 'card-' + Math.random().toString(36).substr(2, 9);
 }
 
-    function showCardForm(columnId) {
+function showCardForm(columnId) {
     const cardForm = document.getElementById('cardForm');
     const column = document.getElementById(columnId);
     cardForm.style.display = 'block';
@@ -74,32 +74,39 @@ function uuid() {
     cardForm.appendChild(columnInput);
 }
 
-    function hideCardForm() {
+function hideCardForm() {
     const cardForm = document.getElementById('cardForm');
     cardForm.style.display = 'none';
     // Clear form fields
     document.getElementById('cardTitle').value = '';
     for (let i = 1; i <= 5; i++) {
-    document.getElementById(`task${i}`).value = '';
-}
+        document.getElementById(`task${i}`).value = '';
+    }
 }
 
-    function addNewCard() {
+function addNewCard() {
     const cardTitle = document.getElementById('cardTitle').value;
     const tasks = [];
     for (let i = 1; i <= 5; i++) {
-    const taskInput = document.getElementById(`task${i}`).value;
-    if (taskInput.trim() !== '') {
-    tasks.push(taskInput);
-}
-}
+        const taskInput = document.getElementById(`task${i}`).value;
+        if (taskInput.trim() !== '') {
+            tasks.push(taskInput);
+        }
+    }
     if (tasks.length < 3) {
-    alert('Необходимо заполнить как минимум три пункта.');
-    return;
-}
+        alert('Необходимо заполнить как минимум три пункта.');
+        return;
+    }
 
     const columnId = document.querySelector('#cardForm [name="columnId"]').value;
     const column = document.getElementById(columnId);
+    if (columnId === 'column1') {
+        const column1CardsCount = document.querySelectorAll('#column1 .card').length;
+        if (column1CardsCount >= 3) {
+            alert('Максимальное количество карточек в первом столбце: 3');
+            return;
+        }
+    }
 
     // Create new card element
     const newCard = document.createElement('div');
@@ -115,23 +122,21 @@ function uuid() {
     // Create tasks list
     const tasksList = document.createElement('ul');
     tasks.forEach((taskText, index) => {
-    const taskElement = document.createElement('li');
-    taskElement.innerHTML = `<input type="checkbox"> ${taskText}`;
-    tasksList.appendChild(taskElement);
+        const taskElement = document.createElement('li');
+        taskElement.innerHTML = `<input type="checkbox"> ${taskText}`;
+        tasksList.appendChild(taskElement);
     });
     newCard.appendChild(tasksList);
 
     // Add task completion event listener
     const cardTasks = newCard.querySelectorAll('input[type="checkbox"]');
     cardTasks.forEach(task => {
-    task.addEventListener('change', () => {
-        handleTaskCompletion(newCard);
+        task.addEventListener('change', () => {
+            handleTaskCompletion(newCard);
+        });
     });
-});
 
     // Add new card to the specified column
     column.appendChild(newCard);
     hideCardForm();
-    }
-
-
+}
