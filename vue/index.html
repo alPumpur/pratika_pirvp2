@@ -46,9 +46,9 @@
             <p v-if="card.completed">Дата и время последнего выполнения: {{ card.lastCompleted }}</p>
         </div>
     </div>
-    <form @submit.prevent="addCard">
-        <input type="text" v-model="newCardTitle" placeholder="Заголовок карточки" :disabled="column2Full">
-        <input v-for="(item, index) in newCardItems" type="text" v-model="item.text" :placeholder="'Пункт ' + (index + 1)" :disabled="column2Full">
+    <form class="form" @submit.prevent="addCard">
+        <input class="title_form" type="text" v-model="newCardTitle" placeholder="Заголовок карточки" :disabled="column2Full">
+        <input class="text_form" v-for="(item, index) in newCardItems" type="text" v-model="item.text" :placeholder="'Пункт ' + (index + 1)" :disabled="column2Full">
         <button class="baton" type="submit" :disabled="column2Full">Добавить карточку</button>
     </form>
 

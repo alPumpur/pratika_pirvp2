@@ -32,3 +32,25 @@ ul {
     width: 150px;
     height: 75px;
 }
+
+.form{
+    display: flex;
+    flex-direction: column;
+    margin-right: 15px;
+    border: 1px solid black;
+    height: 180px;
+    width: 200px;
+}
+
+.text_form{
+    margin-bottom: 5px;
+    list-style-type: in;
+}
+
+.title_form{
+    margin-bottom: 5px;
+}
+
+ul{
+    text-decoration: none;
+}
