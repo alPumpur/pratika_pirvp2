@@ -6,60 +6,81 @@ new Vue({
         column3: [],
         newCardTitle: '',
         newCardItems: [
-            { text: 'Пункт 1', checked: false },
-            { text: 'Пункт 2', checked: false },
-            { text: 'Пункт 3', checked: false },
-            { text: 'Пункт 4', checked: false },
-            { text: 'Пункт 5', checked: false }
-        ]
+            { text: '' },
+            { text: '' },
+            { text: '' },
+            { text: '' },
+            { text: '' }
+        ],
+        column1Locked: false,
+        column2Full1: false
     },
+
+
     mounted() {
         if (localStorage.getItem('notes')) {
             const savedData = JSON.parse(localStorage.getItem('notes'));
             this.column1 = savedData.column1;
             this.column2 = savedData.column2;
             this.column3 = savedData.column3;
+            this.column1Locked = savedData.column1Locked;
+            this.column2Full1 =  savedData.column2Full1;
         }
     },
     methods: {
         addCard() {
-            if (this.newCardTitle.trim() !== '' && this.newCardItems.length >= 3) {
-                this.column1.push({
-                    title: this.newCardTitle,
-                    items: this.newCardItems
-                });
+            if (this.newCardTitle.trim() !== '') {
+                if (this.column2Full) {
+                    alert("Нельзя добавить карточку во второй столбец из-за достижения лимита.");
+                    return;
+                }
+
+                const filledItems = this.newCardItems.filter(item => item.text.trim() !== '');
+                if (filledItems.length < 3) {
+                    alert("Необходимо заполнить не менее трех пунктов списка.");
+                    return;
+                }
+
+                if (!this.column1Locked && this.column1.length < 3) {
+                    this.column1.push({
+                        title: this.newCardTitle,
+                        items: filledItems
+                    });
+                } else {
+                    alert("Нельзя добавить карточку в первый столбец из-за блокировки или достижения лимита.");
+                    return;
+                }
                 this.newCardTitle = '';
                 this.newCardItems = [
-                    { text: 'Пункт 1', checked: false },
-                    { text: 'Пункт 2', checked: false },
-                    { text: 'Пункт 3', checked: false },
-                    { text: 'Пункт 4', checked: false },
-                    { text: 'Пункт 5', checked: false }
+                    { text: '' },
+                    { text: '' },
+                    { text: '' },
+                    { text: '' },
+                    { text: '' }
                 ];
 
-                localStorage.setItem('notes', JSON.stringify({
-                    column1: this.column1,
-                    column2: this.column2,
-                    column3: this.column3
-                }));
-            }
-        },
-        moveToColumn2(card) {
-            if (this.column2.length < 5) {
-                this.column3.splice(this.column3.indexOf(card), 1);
-                this.column2.push(card);
-                card.completed = false;
+                // Проверяем количество карточек во втором столбце перед сохранением
+                if (this.column2.length < 5) {
+                    this.column1Locked = false; // Разблокируем первый столбец
+                }
 
                 localStorage.setItem('notes', JSON.stringify({
                     column1: this.column1,
                     column2: this.column2,
-                    column3: this.column3
+                    column3: this.column3,
+                    column1Locked: this.column1Locked,
                 }));
-            } else {
-                alert("Нельзя переместить карточку во второй столбец из-за достижения лимита.");
             }
         },
+
+
+
         checkItem(card) {
+            if (this.column1Locked) {
+                return; // Если столбик заблокан, то уже се
+            }
+            this.column2Full1 = false;
+
             const checkedCount = card.items.filter(item => item.checked).length;
             const totalCount = card.items.length;
             const completionPercentage = (checkedCount / totalCount) * 100;
@@ -69,9 +90,30 @@ new Vue({
                     this.column1.splice(this.column1.indexOf(card), 1);
                     this.column2.push(card);
                 } else {
+                    this.column2Full1 = true;
                     alert("Нельзя переместить карточку во второй столбец из-за достижения лимита.");
+                }
+            }
+
+            if (this.column1Locked && this.column2.length === 5 && completionPercentage >= 50) {
+                this.column2Full1 = true;
+            }
+
+            // Проверка на перенос карточки из 3 столбца во 2
+            if (completionPercentage >= 50 && this.column3.includes(card)) {
+                if (this.column2.length < 5) {
+                    const index = this.column3.indexOf(card);
+                    this.column3.splice(index, 1);
+                    this.column2.push(card);
+                } else {
+                    alert("Нельзя переместить карточку из третьего столбца во второй столбец из-за заполненности второго столбца.");
                     return;
                 }
+            }
+            if (completionPercentage < 50 && this.column2.includes(card) && this.column1.length < 3){
+                const index1 = this.column2.indexOf(card);
+                this.column2.splice(index1, 1);
+                this.column1.push(card);
             }
 
             if (completionPercentage < 100) {
@@ -91,31 +133,48 @@ new Vue({
                 card.lastCompleted = "";
             }
 
-            // Сохранение данных в localStorage
+            if (completionPercentage < 100 && this.column3.includes(card)) {
+                const index = this.column3.indexOf(card);
+                this.column3.splice(index, 1);
+                this.column2.push(card);
+            }
+
             localStorage.setItem('notes', JSON.stringify({
                 column1: this.column1,
                 column2: this.column2,
-                column3: this.column3
+                column3: this.column3,
+                column1Locked: this.column1Locked,
+                column2Full1: this.column2Full1
             }));
         },
 
-        resetCard(card) {
+        updateItemText(card, item, newText) {
+            if (this.column1Locked) {
+                return;
+            }
 
-            card.items.forEach(item => {
-                item.checked = false;
-            });
-            card.completed = false;
+            item.text = newText;
             localStorage.setItem('notes', JSON.stringify({
                 column1: this.column1,
                 column2: this.column2,
-                column3: this.column3
+                column3: this.column3,
+                column1Locked: this.column1Locked,
             }));
         },
+
         resetAllCards() {
             this.column1 = [];
             this.column2 = [];
             this.column3 = [];
+            this.column1Locked = false;
             localStorage.removeItem('notes');
+            localStorage.setItem('notes', JSON.stringify({
+                column1: this.column1,
+                column2: this.column2,
+                column3: this.column3,
+                column1Locked: this.column1Locked,
+                column2Full1: this.column2Full1
+            }));
         },
     }
 });
