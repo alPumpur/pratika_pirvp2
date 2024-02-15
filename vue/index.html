@@ -3,43 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes</title>
     <link rel="stylesheet" href="css/main.css">
+    <title>Notes App</title>
+    <script src="./src/vue.js"></script>
 </head>
-
 <body>
-    <div class="column" id="column1">
-        <h2>Столбец 1</h2>
+<div id="app" class="app_card">
+    <div class="column">
+        <h2>Столбец 1 (не более 3 карточек)</h2>
+        <div v-for="(card, index) in column1" :key="index" class="card">
+            <h3>{{ card.title }}</h3>
+            <ul>
+                <li v-for="(item, i) in card.items" :key="i">
+                    <input type="checkbox" v-model="item.checked" @change="checkItem(card)" id="column1">
+                    <label :for="column1">{{ item.text }}</label>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="column" id="column2">
-        <h2>Столбец 2</h2>
+    <div class="column">
+        <h2>Столбец 2 (не более 5 карточек)</h2>
+        <div v-for="(card, index) in column2" :key="index" class="card">
+            <h3>{{ card.title }}</h3>
+            <ul>
+                <li v-for="(item, i) in card.items" :key="i">
+                    <input type="checkbox" v-model="item.checked" @change="checkItem(card)" id="column2">
+                    <label :for="column2">{{ item.text }}</label>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="column" id="column3">
+    <div class="column">
         <h2>Столбец 3</h2>
+        <div v-for="(card, index) in column3" :key="index" class="card">
+            <h3>{{ card.title }}</h3>
+            <ul>
+                <li v-for="(item, i) in card.items" :key="i">
+                    <input type="checkbox" v-model="item.checked" @change="checkItem(card)" id="column3">
+                    <label :for="column3">{{ item.text }}</label>
+                </li>
+            </ul>
+            <p v-if="card.completed">Дата и время последнего выполнения: {{ card.lastCompleted }}</p>
+            <button @click="moveToColumn2(card)">Переместить во второй столбец</button>
+            <button @click="resetCard(card)">Сбросить</button>
+        </div>
     </div>
+    <form @submit.prevent="addCard">
+        <input type="text" v-model="newCardTitle" placeholder="Заголовок карточки">
+        <div v-for="(item, index) in newCardItems" :key="index">
+            <input type="text" v-model="item.text" :placeholder="'Пункт ' + (index + 1)">
+        </div>
+        <button type="submit" :disabled="newCardItems.length < 3">Добавить карточку</button>
+    </form>
+    <button @click="resetAllCards">Сбросить все карточки</button>
+</div>
 
-    <button onclick="showCardForm('column1')" class="button">Добавить карточку</button>
+<script defer src="./src/main.js"></script>
 
-
-    <div class="form" id="cardForm">
-        <h3>Создание карточки</h3>
-        <label for="cardTitle">Заголовок:</label>
-        <input type="text" id="cardTitle" name="cardTitle"><br><br>
-        <label for="task1">Пункт 1:</label>
-        <input type="text" id="task1" name="task1"><br><br>
-        <label for="task2">Пункт 2:</label>
-        <input type="text" id="task2" name="task2"><br><br>
-        <label for="task3">Пункт 3:</label>
-        <input type="text" id="task3" name="task3"><br><br>
-        <label for="task4">Пункт 4:</label>
-        <input type="text" id="task4" name="task4"><br><br>
-        <label for="task5">Пункт 5:</label>
-        <input type="text" id="task5" name="task5"><br><br>
-        <button onclick="addNewCard()" class="button">Создать карточку</button>
-    </div>
-
-    <script defer src="./src/vue.js"></script>
-    <script defer src="./src/main.js"></script>
 </body>
-
 </html>
