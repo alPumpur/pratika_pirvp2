@@ -85,19 +85,45 @@ new Vue({
             const totalCount = card.items.length;
             const completionPercentage = (checkedCount / totalCount) * 100;
 
+            // Проверка выполнения карточки на 50% и перемещение во второй столбец при условии, что во втором столбце еще есть место
             if (completionPercentage >= 50 && this.column1.includes(card)) {
                 if (this.column2.length < 5) {
-                    this.column1.splice(this.column1.indexOf(card), 1);
-                    this.column2.push(card);
+                    this.moveCardToSecondColumn(card);
                 } else {
                     this.column2Full1 = true;
                     alert("Нельзя переместить карточку во второй столбец из-за достижения лимита.");
+                    return;
                 }
             }
 
+            // Блокировка первого столбца при достижении лимита во втором столбце
             if (this.column1Locked && this.column2.length === 5 && completionPercentage >= 50) {
                 this.column2Full1 = true;
             }
+
+            // Блокировка карточки при выполнении на 50% в первом столбце
+            if (completionPercentage >= 50 && this.column1.includes(card)) {
+                this.column1Locked = true;
+            }
+
+            // Разблокировка первого столбца при выполнении на менее чем 50% в карточке, уже находящейся во втором столбце
+            if (completionPercentage < 50 && this.column2.includes(card) && this.column1.length < 3) {
+                this.column1Locked = false;
+            }
+
+            // Перемещение карточки из первого во второй столбец при разблокировке второго столбца
+            if (this.column2Full1 === false && this.column2.length < 5 && this.column2Full1 && this.column1.includes(card)) {
+                this.moveCardToSecondColumn(card);
+            }
+
+            // Если второй столбец разблокирован, проверяем первый столбец на карточки выполненные на 50% и более и перемещаем их во второй столбец
+            if (!this.column2Full1) {
+                this.checkAndMoveCards();
+            }
+
+
+
+
 
             // Проверка на перенос карточки из 3 столбца во 2
             if (completionPercentage >= 50 && this.column3.includes(card)) {
@@ -148,6 +174,30 @@ new Vue({
             }));
         },
 
+        moveCardToSecondColumn(card) {
+            const index = this.column1.indexOf(card);
+            if (index !== -1) {
+                this.column1.splice(index, 1);
+                this.column2.push(card);
+            }
+        },
+
+// Метод для проверки и перемещения карточек из первого во второй столбец
+        checkAndMoveCards() {
+            for (let i = this.column1.length - 1; i >= 0; i--) {
+                const card = this.column1[i];
+                const checkedCount = card.items.filter(item => item.checked).length;
+                const totalCount = card.items.length;
+                const completionPercentage = (checkedCount / totalCount) * 100;
+
+                if (completionPercentage >= 50) {
+                    this.moveCardToSecondColumn(card);
+                }
+            }
+            // Перезагрузка страницы после перемещения карточек (если что включить)
+            //location.reload();
+        },
+
         updateItemText(card, item, newText) {
             if (this.column1Locked) {
                 return;
@@ -176,5 +226,16 @@ new Vue({
                 column2Full1: this.column2Full1
             }));
         },
+
+        //toAllReady(){
+            //for i in task{
+                //for j in task[i]{
+                    ///task[i][j]= true
+                //}
+               // toNextcoL(task[i])
+                //toNextcoL(task[i])
+            //}
+        //}
+
     }
 });
