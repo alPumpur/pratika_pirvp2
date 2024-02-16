@@ -51,7 +51,7 @@
         <input class="text_form" v-for="(item, index) in newCardItems" type="text" v-model="item.text" :placeholder="'Пункт ' + (index + 1)" :disabled="column2Full">
         <button class="baton" type="submit" :disabled="column2Full">Добавить карточку</button>
     </form>
-
+    <button class="button" @click="moveToThirdColumn">Перенести все карточки в третий столбец</button>
     <button class="button" @click="resetAllCards">Сбросить все карточки</button>
 </div>
 <script type="module" src="./src/main.js"></script>

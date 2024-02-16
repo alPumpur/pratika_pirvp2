@@ -226,16 +226,43 @@ new Vue({
                 column2Full1: this.column2Full1
             }));
         },
+        
+        // Метод для перемещения всех карточек из первого столбца в третий
+        moveToThirdColumn() {
+            for (const card of this.column1) {
+                // Отмечаем все пункты карточки как выполненные
+                for (const item of card.items) {
+                    item.checked = true;
+                }
+                // Перемещаем карточку в третий столбец
+                this.column3.push(card);
+            }
+            // Очищаем первый столбец
+            this.column1 = [];
 
-        //toAllReady(){
-            //for i in task{
-                //for j in task[i]{
-                    ///task[i][j]= true
-                //}
-               // toNextcoL(task[i])
-                //toNextcoL(task[i])
-            //}
-        //}
+            for (const card of this.column2) {
+                // Отмечаем все пункты карточки как выполненные
+                for (const item of card.items) {
+                    item.checked = true;
+                }
+                // Перемещаем карточку в третий столбец
+                this.column3.push(card);
+            }
+            // Очищаем первый столбец
+            this.column2 = [];
 
+            // Обновляем состояние в localStorage
+            this.saveDataToLocalStorage();
+        },
+        // Метод для сохранения данных в Local Storage
+        saveDataToLocalStorage() {
+            localStorage.setItem('notes', JSON.stringify({
+                column1: this.column1,
+                column2: this.column2,
+                column3: this.column3,
+                column1Locked: this.column1Locked,
+                column2Full1: this.column2Full1
+            }));
+        },
     }
 });
